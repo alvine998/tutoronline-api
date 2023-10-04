@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users', {
+  return sequelize.define('places', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,30 +11,33 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING(100),
-      allowNull: true
-    },
-    phone: {
-      type: DataTypes.STRING(13),
-      allowNull: false
-    },
-    password: {
+    address: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    point: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    ref_code: {
+    province: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    link_ref_code: {
+    cities: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: false
+    },
+    long: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    lat: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    photo: {
+      type: DataTypes.JSON,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
     },
     created_on: {
       type: DataTypes.DATE,
@@ -43,7 +46,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     updated_on: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
     deleted: {
       type: DataTypes.TINYINT,
@@ -52,7 +56,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'users',
+    tableName: 'places',
     timestamps: false,
     indexes: [
       {

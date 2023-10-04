@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users', {
+  return sequelize.define('admins', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,30 +11,26 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
+    phone: {
+      type: DataTypes.STRING(13),
+      allowNull: true
+    },
     email: {
       type: DataTypes.STRING(100),
       allowNull: true
-    },
-    phone: {
-      type: DataTypes.STRING(13),
-      allowNull: false
     },
     password: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    point: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    ref_code: {
-      type: DataTypes.STRING(100),
+    role: {
+      type: DataTypes.ENUM('admin','super_admin'),
       allowNull: false
     },
-    link_ref_code: {
-      type: DataTypes.STRING(100),
-      allowNull: true
+    status: {
+      type: DataTypes.ENUM('active','nonactive'),
+      allowNull: false,
+      defaultValue: "active"
     },
     created_on: {
       type: DataTypes.DATE,
@@ -43,7 +39,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     updated_on: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
     deleted: {
       type: DataTypes.TINYINT,
@@ -52,7 +49,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'users',
+    tableName: 'admins',
     timestamps: false,
     indexes: [
       {

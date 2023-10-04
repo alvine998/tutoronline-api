@@ -1,38 +1,60 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('customers', {
+  return sequelize.define('transactions', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    app_id: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      defaultValue: "id.app.midland"
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
-    name: {
+    user_name: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    phone: {
-      type: DataTypes.STRING(13),
+    place_id: {
+      type: DataTypes.INTEGER,
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING(255),
+    place_name: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    image: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    remarks: {
+      type: DataTypes.STRING(250),
+      allowNull: true
+    },
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    voucher_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    voucher_code: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    total_price: {
+      type: DataTypes.DOUBLE,
       allowNull: false
     },
     status: {
-      type: DataTypes.ENUM('waiting','called'),
+      type: DataTypes.ENUM('pending','paid','unpaid'),
       allowNull: false,
-      defaultValue: "waiting"
+      defaultValue: "unpaid"
     },
     created_on: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
+      allowNull: false
     },
     updated_on: {
       type: DataTypes.DATE,
@@ -45,7 +67,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'customers',
+    tableName: 'transactions',
     timestamps: false,
     indexes: [
       {

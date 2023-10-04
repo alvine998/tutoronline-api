@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const customers = db.customers
+const banks = db.banks
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -8,27 +8,32 @@ require('dotenv').config()
 exports.list = async (req, res) => {
     try {
         const size = req.query.size || 10;
-        const result = await customers.findAll({
+        const page = req.query.page || 0;
+        const offset = size * page;
+
+        const result = await banks.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
-                app_id: {[Op.eq]: req.header('x-app-id')},
                 ...req.query.search && {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${req.query.search}%` } },
-                        { phone: { [Op.like]: `%${req.query.search}%` } },
-                        { email: { [Op.like]: `%${req.query.search}%` } },
+                        { account_name: { [Op.like]: `%${req.query.search}%` } },
+                        { account_number: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
             order: [
                 ['created_on', 'DESC'],
             ],
-            limit: size
+            ...req.query.pagination == 'true' && {
+                limit: size,
+                offset: offset
+            }
         })
         return res.status(200).send({
             status: "success",
-            total_items: result.length,
             items: result,
+            total_pages: Math.ceil(result.count / size),
+            current_page: page,
             code: 200
         })
     } catch (error) {
@@ -38,10 +43,19 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
+        ['account_name', 'account_number', 'name']?.map(value => {
+            if (!req.body[value]) {
+                return res.status(400).send({
+                    status: "error",
+                    error_message: "Parameter tidak lengkap " + value,
+                    code: 400
+                })
+            }
+        })
         const payload = {
             ...req.body,
         };
-        const result = await customers.create(payload)
+        const result = await banks.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -56,31 +70,25 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await customers.findOne({
+        const result = await banks.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
             }
         })
         if (!result) {
-            return res.status(404).send({ message: "Data tidak ditemukan!" })
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
         }
         const payload = {
             ...req.body,
         }
-        const onUpdate = await customers.update(payload, {
+        const onUpdate = await banks.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
             }
         })
-        const results = await customers.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
-            }
-        })
-        res.status(200).send({ message: "Berhasil ubah data", result: results, update: onUpdate })
+        res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
         return
     } catch (error) {
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
@@ -89,7 +97,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await customers.findOne({
+        const result = await banks.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }

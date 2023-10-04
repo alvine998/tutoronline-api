@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users', {
+  return sequelize.define('vouchers', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,29 +11,44 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    email: {
-      type: DataTypes.STRING(100),
-      allowNull: true
-    },
-    phone: {
-      type: DataTypes.STRING(13),
-      allowNull: false
-    },
-    password: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    point: {
-      type: DataTypes.INTEGER,
+    type: {
+      type: DataTypes.ENUM('cashback','discount','gift','other'),
       allowNull: false,
+      defaultValue: "cashback"
+    },
+    max: {
+      type: DataTypes.DOUBLE,
+      allowNull: true,
       defaultValue: 0
     },
-    ref_code: {
+    total: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue: "0"
+    },
+    quota: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    code: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    link_ref_code: {
-      type: DataTypes.STRING(100),
+    max_used: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1
+    },
+    expired_at: {
+      type: DataTypes.DATEONLY,
+      allowNull: true
+    },
+    time_start: {
+      type: DataTypes.TIME,
+      allowNull: true
+    },
+    time_end: {
+      type: DataTypes.TIME,
       allowNull: true
     },
     created_on: {
@@ -43,7 +58,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     updated_on: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
     deleted: {
       type: DataTypes.TINYINT,
@@ -52,7 +68,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'users',
+    tableName: 'vouchers',
     timestamps: false,
     indexes: [
       {
