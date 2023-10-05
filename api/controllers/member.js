@@ -15,6 +15,7 @@ exports.list = async (req, res) => {
             where: {
                 deleted: { [Op.eq]: 0 },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
+                ...req.query.birth_date && { birth_date: { [Op.eq]: req.query.birth_date } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
