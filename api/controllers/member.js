@@ -14,6 +14,7 @@ exports.list = async (req, res) => {
         const result = await members.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
+                ...req.query.id && { id: { [Op.eq]: req.query.id } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
@@ -39,7 +40,7 @@ exports.list = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Server mengalami gangguan!", error: error })
-        return 
+        return
     }
 };
 
