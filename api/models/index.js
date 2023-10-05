@@ -19,12 +19,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.users = require("./users.js")(sequelize, Sequelize);
-db.assets = require("./assets.js")(sequelize, Sequelize);
-db.banks = require("./banks.js")(sequelize, Sequelize);
-db.admins = require("./admins.js")(sequelize, Sequelize);
-db.places = require("./places.js")(sequelize, Sequelize);
-db.transactions = require("./transactions.js")(sequelize, Sequelize);
-db.vouchers = require("./vouchers.js")(sequelize, Sequelize);
+db.members = require("./members.js")(sequelize, Sequelize);
 
 module.exports = db;

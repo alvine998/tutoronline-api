@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('vouchers', {
+  return sequelize.define('members', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,44 +11,44 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    type: {
-      type: DataTypes.ENUM('cashback','discount','gift','other'),
-      allowNull: false,
-      defaultValue: "cashback"
-    },
-    max: {
-      type: DataTypes.DOUBLE,
-      allowNull: true,
-      defaultValue: 0
-    },
-    total: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
-      defaultValue: "0"
-    },
-    quota: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    code: {
+    birth_place: {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    max_used: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1
+    birth_date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    photo: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    clasification: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    personel_type: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+    tool_type: {
+      type: DataTypes.BLOB,
+      allowNull: false
+    },
+    regis_no: {
+      type: DataTypes.STRING(100),
+      allowNull: false
     },
     expired_at: {
       type: DataTypes.DATEONLY,
-      allowNull: true
+      allowNull: false
     },
-    time_start: {
-      type: DataTypes.TIME,
-      allowNull: true
+    class: {
+      type: DataTypes.STRING(100),
+      allowNull: false
     },
-    time_end: {
-      type: DataTypes.TIME,
+    instance: {
+      type: DataTypes.STRING(100),
       allowNull: true
     },
     created_on: {
@@ -58,8 +58,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     updated_on: {
       type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+      allowNull: true
     },
     deleted: {
       type: DataTypes.TINYINT,
@@ -68,7 +67,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'vouchers',
+    tableName: 'members',
     timestamps: false,
     indexes: [
       {

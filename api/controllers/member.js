@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const banks = db.banks
+const members = db.members
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -11,13 +11,13 @@ exports.list = async (req, res) => {
         const page = req.query.page || 0;
         const offset = size * page;
 
-        const result = await banks.findAndCountAll({
+        const result = await members.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
                 ...req.query.search && {
                     [Op.or]: [
-                        { account_name: { [Op.like]: `%${req.query.search}%` } },
-                        { account_number: { [Op.like]: `%${req.query.search}%` } },
+                        { name: { [Op.like]: `%${req.query.search}%` } },
+                        { regis_no: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -37,25 +37,28 @@ exports.list = async (req, res) => {
             code: 200
         })
     } catch (error) {
-        return res.status(500).send({ message: "Server mengalami gangguan!", error: error })
+        console.log(error);
+        res.status(500).send({ message: "Server mengalami gangguan!", error: error })
+        return 
     }
 };
 
 exports.create = async (req, res) => {
     try {
-        ['account_name', 'account_number', 'name']?.map(value => {
-            if (!req.body[value]) {
-                return res.status(400).send({
-                    status: "error",
-                    error_message: "Parameter tidak lengkap " + value,
-                    code: 400
-                })
-            }
-        })
+        ['name', 'tool_type', 'birth_place', 'birth_date', 'photo', 'clasification', 'personel_type', 'regis_no', 'expired_at',
+            'class']?.map(value => {
+                if (!req.body[value]) {
+                    return res.status(400).send({
+                        status: "error",
+                        error_message: "Parameter tidak lengkap " + value,
+                        code: 400
+                    })
+                }
+            })
         const payload = {
             ...req.body,
         };
-        const result = await banks.create(payload)
+        const result = await members.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -70,7 +73,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await banks.findOne({
+        const result = await members.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -82,7 +85,7 @@ exports.update = async (req, res) => {
         const payload = {
             ...req.body,
         }
-        const onUpdate = await banks.update(payload, {
+        const onUpdate = await members.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -97,7 +100,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await banks.findOne({
+        const result = await members.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }
