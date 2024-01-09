@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 module.exports = {
-    HOST: process.env.DB_HOST || "localhost",
+    HOST: "103.163.138.107",
     USER: process.env.DB_USER || "root",
     PASSWORD: process.env.DB_PASSWORD || "",
     DB: process.env.DB_NAME || "temank3",
