@@ -1,0 +1,182 @@
+const Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('ads', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    partner_code: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    title: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    user_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    brand_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'brands',
+        key: 'id'
+      }
+    },
+    brand_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    type_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'types',
+        key: 'id'
+      }
+    },
+    type_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    category_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    category_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    subcategory_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    subcategory_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    province_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    province_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    city_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    city_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    district_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    district_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    images: {
+      type: DataTypes.JSON,
+      allowNull: false
+    },
+    km: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    transmission: {
+      type: DataTypes.ENUM('AT','MT'),
+      allowNull: true
+    },
+    year: {
+      type: DataTypes.STRING(4),
+      allowNull: true
+    },
+    plat_no: {
+      type: DataTypes.STRING(8),
+      allowNull: true
+    },
+    color: {
+      type: DataTypes.STRING(250),
+      allowNull: true
+    },
+    ownership: {
+      type: DataTypes.ENUM('individual','company'),
+      allowNull: true
+    },
+    area: {
+      type: DataTypes.DOUBLE,
+      allowNull: true
+    },
+    certificates: {
+      type: DataTypes.JSON,
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      defaultValue: 0
+    },
+    created_on: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    updated_on: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    deleted: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      defaultValue: 0
+    }
+  }, {
+    sequelize,
+    tableName: 'ads',
+    timestamps: false,
+    indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
+      {
+        name: "brand_id",
+        using: "BTREE",
+        fields: [
+          { name: "brand_id" },
+        ]
+      },
+      {
+        name: "type_id",
+        using: "BTREE",
+        fields: [
+          { name: "type_id" },
+        ]
+      },
+    ]
+  });
+};

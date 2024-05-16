@@ -1,6 +1,6 @@
 exports.middlewareHere = async (req, res, next) => {
     try {
-        if(req.header('bearer-token') !== "temank3ku"){
+        if(req.header('bearer-token') !== "tokotitohapi"){
             return res.status(401).send({
                 message: "Access Denied!",
                 code: 401

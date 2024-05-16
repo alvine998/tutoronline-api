@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "api_temank3",
+    "name": "tokotitoh_api",
     "builds": [
         {
             "src": "index.js",

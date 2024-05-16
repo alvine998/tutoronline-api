@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const members = db.members
+const partners = db.partners
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -11,21 +11,22 @@ exports.list = async (req, res) => {
         const page = req.query.page || 0;
         const offset = size * page;
 
-        const result = await members.findAndCountAll({
+        const result = await partners.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.birth_date && { birth_date: { [Op.eq]: req.query.birth_date } },
+                ...req.query.status && { status: { [Op.in]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
-                        { regis_no: { [Op.like]: `%${req.query.search}%` } },
+                        { package_name: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
             order: [
                 ['created_on', 'DESC'],
             ],
+            exclude: ['deleted'],
             ...req.query.pagination == 'true' && {
                 limit: size,
                 offset: offset
@@ -47,20 +48,19 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'tool_type', 'birth_place', 'birth_date', 'photo', 'clasification', 'personel_type', 'regis_no', 'expired_at',
-            'class']?.map(value => {
-                if (!req.body[value]) {
-                    return res.status(400).send({
-                        status: "error",
-                        error_message: "Parameter tidak lengkap " + value,
-                        code: 400
-                    })
-                }
-            })
+        ['name', 'package_name', 'logo']?.map(value => {
+            if (!req.body[value]) {
+                return res.status(400).send({
+                    status: "error",
+                    error_message: "Parameter tidak lengkap " + value,
+                    code: 400
+                })
+            }
+        })
         const payload = {
             ...req.body,
         };
-        const result = await members.create(payload)
+        const result = await partners.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -75,7 +75,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await members.findOne({
+        const result = await partners.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -87,7 +87,7 @@ exports.update = async (req, res) => {
         const payload = {
             ...req.body,
         }
-        const onUpdate = await members.update(payload, {
+        const onUpdate = await partners.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -102,7 +102,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await members.findOne({
+        const result = await partners.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }

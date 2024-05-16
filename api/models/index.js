@@ -20,6 +20,6 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.members = require("./members.js")(sequelize, Sequelize);
+db.partners = require("./partners.js")(sequelize, Sequelize);
 
 module.exports = db;

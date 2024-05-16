@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 require('dotenv').config();
@@ -34,8 +35,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to API Teman K3 ku" });
+    console.log(path.join(__dirname, "upload/images"));
+    res.json({ message: "Welcome to API Marketplace" });
 });
+
+app.use(express.static(path.join("upload")))
 
 require('./api/routes')(app);
 
