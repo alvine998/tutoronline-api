@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const partners = db.partners
+const categories = db.categories
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -11,15 +11,14 @@ exports.list = async (req, res) => {
         const page = req.query.page || 0;
         const offset = size * page;
 
-        const result = await partners.findAndCountAll({
+        const result = await categories.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
+                partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.status && { status: { [Op.in]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
-                        { package_name: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -48,16 +47,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const existPartner = await partners.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                package_name: { [Op.eq]: req.body.package_name }
-            }
-        })
-        if(existPartner){
-            return res.status(400).send({ message: "Kode Partner Sudah Ada!" })
-        }
-        ['name', 'package_name', 'logo']?.map(value => {
+        ['name']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -68,8 +58,9 @@ exports.create = async (req, res) => {
         })
         const payload = {
             ...req.body,
+            partner_code: req.header('x-partner-code')
         };
-        const result = await partners.create(payload)
+        const result = await categories.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -84,7 +75,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await partners.findOne({
+        const result = await categories.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -96,7 +87,7 @@ exports.update = async (req, res) => {
         const payload = {
             ...req.body,
         }
-        const onUpdate = await partners.update(payload, {
+        const onUpdate = await categories.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -111,7 +102,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await partners.findOne({
+        const result = await categories.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }

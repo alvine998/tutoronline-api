@@ -21,5 +21,6 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.partners = require("./partners.js")(sequelize, Sequelize);
+db.categories = require("./categories.js")(sequelize, Sequelize);
 
 module.exports = db;
