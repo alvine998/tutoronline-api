@@ -20,6 +20,7 @@ module.exports = (app) => {
     const cSubCategory = require('../controllers/subcategory.js');
     const cBrand = require('../controllers/brand.js');
     const cType = require('../controllers/type.js');
+    const cUser = require('../controllers/user.js');
     const cGeolocation = require('../controllers/geolocation.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
@@ -53,4 +54,10 @@ module.exports = (app) => {
     app.post('/type', middlewareHere, middlewarePackageName, cType.create);
     app.patch('/type', middlewareHere, middlewarePackageName, cType.update);
     app.delete('/type', middlewareHere, middlewarePackageName, cType.delete);
+
+    app.get('/users', middlewareHere, middlewarePackageName, cUser.list);
+    app.post('/user', middlewareHere, middlewarePackageName, cUser.create);
+    app.patch('/user', middlewareHere, middlewarePackageName, cUser.update);
+    app.delete('/user', middlewareHere, middlewarePackageName, cUser.delete);
+    app.post('/user/login', middlewareHere, middlewarePackageName, cUser.login);
 }
