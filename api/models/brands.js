@@ -19,13 +19,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    caetgory_name: {
+    category_name: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
     image: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     status: {
       type: DataTypes.TINYINT,

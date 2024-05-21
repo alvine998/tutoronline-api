@@ -18,6 +18,8 @@ module.exports = (app) => {
     const cUpload = require('../controllers/upload.js');
     const cCategory = require('../controllers/category.js');
     const cSubCategory = require('../controllers/subcategory.js');
+    const cBrand = require('../controllers/brand.js');
+    const cType = require('../controllers/type.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -35,4 +37,14 @@ module.exports = (app) => {
     app.post('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.create);
     app.patch('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.update);
     app.delete('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.delete);
+
+    app.get('/brands', middlewareHere, middlewarePackageName, cBrand.list);
+    app.post('/brand', middlewareHere, middlewarePackageName, cBrand.create);
+    app.patch('/brand', middlewareHere, middlewarePackageName, cBrand.update);
+    app.delete('/brand', middlewareHere, middlewarePackageName, cBrand.delete);
+
+    app.get('/types', middlewareHere, middlewarePackageName, cType.list);
+    app.post('/type', middlewareHere, middlewarePackageName, cType.create);
+    app.patch('/type', middlewareHere, middlewarePackageName, cType.update);
+    app.delete('/type', middlewareHere, middlewarePackageName, cType.delete);
 }
