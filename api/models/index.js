@@ -27,5 +27,9 @@ db.partners = require("./partners.js")(sequelize, Sequelize);
 db.brands = require("./brands.js")(sequelize, Sequelize);
 db.types = require("./types.js")(sequelize, Sequelize);
 db.users = require("./users.js")(sequelize, Sequelize);
+db.provinces = require("./provinces.js")(sequelize, Sequelize);
+db.cities = require("./cities.js")(sequelize, Sequelize);
+db.districts = require("./districts.js")(sequelize, Sequelize);
+db.villages = require("./villages.js")(sequelize, Sequelize);
 
 module.exports = db;

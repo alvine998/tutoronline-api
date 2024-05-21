@@ -20,6 +20,7 @@ module.exports = (app) => {
     const cSubCategory = require('../controllers/subcategory.js');
     const cBrand = require('../controllers/brand.js');
     const cType = require('../controllers/type.js');
+    const cGeolocation = require('../controllers/geolocation.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -27,6 +28,11 @@ module.exports = (app) => {
     app.delete('/partner', middlewareHere, cPartner.delete);
 
     app.post('/file-upload', upload.single('file'), cUpload.upload);
+
+    app.get('/provinces', middlewareHere, cGeolocation.listProvince);
+    app.get('/cities', middlewareHere, cGeolocation.listCity);
+    app.get('/districts', middlewareHere, cGeolocation.listDistrict);
+    app.get('/villages', middlewareHere, cGeolocation.listVillage);
 
     app.get('/categories', middlewareHere, middlewarePackageName, cCategory.list);
     app.post('/category', middlewareHere, middlewarePackageName, cCategory.create);
