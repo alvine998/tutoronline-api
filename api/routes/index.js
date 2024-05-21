@@ -17,6 +17,7 @@ module.exports = (app) => {
     const cPartner = require('../controllers/partner.js');
     const cUpload = require('../controllers/upload.js');
     const cCategory = require('../controllers/category.js');
+    const cSubCategory = require('../controllers/subcategory.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -29,4 +30,9 @@ module.exports = (app) => {
     app.post('/category', middlewareHere, middlewarePackageName, cCategory.create);
     app.patch('/category', middlewareHere, middlewarePackageName, cCategory.update);
     app.delete('/category', middlewareHere, middlewarePackageName, cCategory.delete);
+
+    app.get('/subcategories', middlewareHere, middlewarePackageName, cSubCategory.list);
+    app.post('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.create);
+    app.patch('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.update);
+    app.delete('/subcategory', middlewareHere, middlewarePackageName, cSubCategory.delete);
 }

@@ -22,5 +22,10 @@ db.sequelize = sequelize;
 
 db.partners = require("./partners.js")(sequelize, Sequelize);
 db.categories = require("./categories.js")(sequelize, Sequelize);
+db.subcategories = require("./subcategories.js")(sequelize, Sequelize);
+db.partners = require("./partners.js")(sequelize, Sequelize);
+db.brands = require("./brands.js")(sequelize, Sequelize);
+db.types = require("./types.js")(sequelize, Sequelize);
+db.users = require("./users.js")(sequelize, Sequelize);
 
 module.exports = db;
