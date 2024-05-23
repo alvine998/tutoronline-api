@@ -4,7 +4,7 @@ exports.upload = async (req, res) => {
     try {
         return res.status(200).send({
             status: "success",
-            url: (process.env.PATH_URL || 'http://localhost:8080/images/') + req?.file?.filename,
+            url: req?.file?.filename,
             code: 200
         })
     } catch (error) {
