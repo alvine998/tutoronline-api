@@ -3,10 +3,10 @@ const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '/var/www/tokotitoh_api/upload/images')
+        cb(null, __dirname + '../../../upload/images')
     },
     filename: function (req, file, cb) {
-        cb(null, `${file?.originalname}`)
+        cb(null, `${Date.now()}-${file?.originalname}`)
     }
 })
 const upload = multer({
