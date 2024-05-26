@@ -9,6 +9,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      -"/var/www/tokotitoh_api/upload/images:/app/upload/images"
     ports:
       - "8082:8082"
     environment:
