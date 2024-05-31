@@ -1,7 +1,7 @@
 
 const db = require('../models')
-const subcategories = db.subcategories
-const categories = db.categories
+const reports = db.reports
+const users = db.users
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -12,15 +12,16 @@ exports.list = async (req, res) => {
         const page = req.query.page || 0;
         const offset = size * page;
 
-        const result = await subcategories.findAndCountAll({
+        const result = await reports.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.category_id && { category_id: { [Op.eq]: req.query.category_id } },
+                ...req.query.user_id && { user_id: { [Op.eq]: req.query.user_id } },
+                ...req.query.status && { status: { [Op.in]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${req.query.search}%` } },
+                        { title: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -49,7 +50,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name']?.map(value => {
+        ['title', 'description', 'user_id']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -58,21 +59,26 @@ exports.create = async (req, res) => {
                 })
             }
         })
-        const existCategory = await categories.findOne({
+        const user = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.category_id }
+                partner_code: { [Op.eq]: req.header('x-partner-code') },
+                id: { [Op.eq]: req.body.user_id }
             }
         })
-        if (!existCategory) {
-            return res.status(400).send({ message: "Kategori tidak ditemukan!" })
+        if (!user) {
+            return res.status(400).send({
+                status: "error",
+                error_message: "Pengguna tidak ditemukan",
+                code: 400
+            })
         }
         const payload = {
             ...req.body,
             partner_code: req.header('x-partner-code'),
-            category_name: existCategory.name
+            user_name: user.name
         };
-        const result = await subcategories.create(payload)
+        const result = await reports.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -87,7 +93,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await subcategories.findOne({
+        const result = await reports.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -99,7 +105,7 @@ exports.update = async (req, res) => {
         const payload = {
             ...req.body,
         }
-        const onUpdate = await subcategories.update(payload, {
+        const onUpdate = await reports.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -108,13 +114,14 @@ exports.update = async (req, res) => {
         res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
         return
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
 
 exports.delete = async (req, res) => {
     try {
-        const result = await subcategories.findOne({
+        const result = await reports.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }
@@ -128,6 +135,7 @@ exports.delete = async (req, res) => {
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }

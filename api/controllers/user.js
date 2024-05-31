@@ -18,6 +18,8 @@ exports.list = async (req, res) => {
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
                 ...req.query.role && { role: { [Op.in]: req.query.role } },
+                ...req.query.isCustomer == '1' && { google_id: { [Op.not]: null } },
+                ...req.query.isCustomer == '0' && { google_id: { [Op.is]: null } },
                 ...req.query.google_id && { google_id: { [Op.eq]: req.query.google_id } },
                 ...req.query.search && {
                     [Op.or]: [
@@ -141,18 +143,21 @@ exports.delete = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { phone, password } = req.body;
-        if (!phone || !password) {
+        const { identity, password } = req.body;
+        if (!identity || !password) {
             return res.status(404).send({ message: "Masukkan Email dan Password!" })
         }
         const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                phone: { [Op.eq]: req.body.phone }
+                [Op.or]: {
+                    phone: req.body.identity,
+                    email: req.body.identity
+                }
             }
         })
         if (!result) {
-            return res.status(404).send({ message: "Data tidak ditemukan!" })
+            return res.status(404).send({ message: "Akun Belum Terdaftar!" })
         }
         const isCompare = await encrypt.compare(password, result.password)
         if (!isCompare) {
@@ -160,6 +165,7 @@ exports.login = async (req, res) => {
         }
         return res.status(200).send({ message: "Berhasil Login", user: result })
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
