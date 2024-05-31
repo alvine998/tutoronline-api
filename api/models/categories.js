@@ -19,6 +19,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    seq: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     created_on: {
       type: DataTypes.DATE,
       allowNull: false,

@@ -8,11 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     district_id: {
       type: DataTypes.CHAR(7),
-      allowNull: false,
-      references: {
-        model: 'districts',
-        key: 'id'
-      }
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING(255),

@@ -8,11 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     province_id: {
       type: DataTypes.CHAR(2),
-      allowNull: false,
-      references: {
-        model: 'provinces',
-        key: 'id'
-      }
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING(255),

@@ -22,6 +22,7 @@ exports.list = async (req, res) => {
                 ...req.query.search && {
                     [Op.or]: [
                         { title: { [Op.like]: `%${req.query.search}%` } },
+                        { user_name: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },

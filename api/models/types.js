@@ -17,11 +17,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     brand_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'brands',
-        key: 'id'
-      }
+      allowNull: false
     },
     brand_name: {
       type: DataTypes.STRING(250),

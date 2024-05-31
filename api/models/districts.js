@@ -8,11 +8,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     city_id: {
       type: DataTypes.CHAR(4),
-      allowNull: false,
-      references: {
-        model: 'cities',
-        key: 'id'
-      }
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING(255),

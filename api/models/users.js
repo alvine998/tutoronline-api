@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   return sequelize.define('users', {
     id: {
       autoIncrement: true,
@@ -28,7 +28,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     role: {
-      type: DataTypes.ENUM('admin', 'super_admin', 'customer'),
+      type: DataTypes.ENUM('admin','super_admin','customer'),
       allowNull: false
     },
     google_id: {
