@@ -1,7 +1,7 @@
 
 const db = require('../models')
-const types = db.types
-const brands = db.brands
+const ads = db.ads
+const users = db.users
 const Op = db.Sequelize.Op
 require('dotenv').config()
 
@@ -12,16 +12,29 @@ exports.list = async (req, res) => {
         const page = +req.query.page || 0;
         const offset = size * page;
 
-        const result = await types.findAndCountAll({
+        const result = await ads.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
+                ...req.query.user_id && { user_id: { [Op.eq]: req.query.user_id } },
                 ...req.query.brand_id && { brand_id: { [Op.eq]: req.query.brand_id } },
+                ...req.query.type_id && { type_id: { [Op.eq]: req.query.type_id } },
+                ...req.query.category_id && { category_id: { [Op.eq]: req.query.category_id } },
+                ...req.query.subcategory_id && { subcategory_id: { [Op.eq]: req.query.subcategory_id } },
+                ...req.query.province_id && { province_id: { [Op.eq]: req.query.province_id } },
+                ...req.query.city_id && { city_id: { [Op.eq]: req.query.city_id } },
+                ...req.query.district_id && { district_id: { [Op.eq]: req.query.district_id } },
+                ...req.query.village_id && { village_id: { [Op.eq]: req.query.village_id } },
+                ...req.query.ownership && { ownership: { [Op.eq]: req.query.ownership } },
+                ...req.query.year && { year: { [Op.eq]: req.query.year } },
+                ...req.query.transmission && { transmission: { [Op.eq]: req.query.transmission } },
+                ...req.query.km && { km: { [Op.eq]: req.query.km } },
+                ...req.query.color && { color: { [Op.eq]: req.query.color } },
                 ...req.query.status && { status: { [Op.in]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${req.query.search}%` } },
+                        { title: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -50,7 +63,9 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'brand_id']?.map(value => {
+        ['title', 'description', 'user_id', 'price', 'brand_id', 'type_id', 'category_id', 'subcategory_id', 'province_id',
+            'city_id', 'district_id', 'images'
+        ]?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -59,26 +74,11 @@ exports.create = async (req, res) => {
                 })
             }
         })
-        const brand = await brands.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                partner_code: { [Op.eq]: req.header('x-partner-code') },
-                id: { [Op.eq]: req.body.brand_id }
-            }
-        })
-        if (!brand) {
-            return res.status(400).send({
-                status: "error",
-                error_message: "Brand tidak ditemukan",
-                code: 400
-            })
-        }
         const payload = {
             ...req.body,
             partner_code: req.header('x-partner-code'),
-            brand_name: brand.name
         };
-        const result = await types.create(payload)
+        const result = await ads.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -93,7 +93,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await types.findOne({
+        const result = await ads.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -105,7 +105,7 @@ exports.update = async (req, res) => {
         const payload = {
             ...req.body,
         }
-        const onUpdate = await types.update(payload, {
+        const onUpdate = await ads.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -114,13 +114,14 @@ exports.update = async (req, res) => {
         res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
         return
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
 
 exports.delete = async (req, res) => {
     try {
-        const result = await types.findOne({
+        const result = await ads.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }
@@ -134,6 +135,7 @@ exports.delete = async (req, res) => {
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
+        console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }

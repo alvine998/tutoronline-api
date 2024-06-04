@@ -7,8 +7,8 @@ require('dotenv').config()
 // Retrieve and return all notes from the database.
 exports.list = async (req, res) => {
     try {
-        const size = req.query.size || 10;
-        const page = req.query.page || 0;
+        const size = +req.query.size || 10;
+        const page = +req.query.page || 0;
         const offset = size * page;
 
         const result = await partners.findAndCountAll({
@@ -26,7 +26,7 @@ exports.list = async (req, res) => {
             order: [
                 ['created_on', 'DESC'],
             ],
-            exclude: ['deleted'],
+            attributes: { exclude: ['deleted'] },
             ...req.query.pagination == 'true' && {
                 limit: size,
                 offset: offset
@@ -54,7 +54,7 @@ exports.create = async (req, res) => {
                 package_name: { [Op.eq]: req.body.package_name }
             }
         })
-        if(existPartner){
+        if (existPartner) {
             return res.status(400).send({ message: "Kode Partner Sudah Ada!" })
         }
         ['name', 'package_name', 'logo']?.map(value => {

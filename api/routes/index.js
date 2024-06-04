@@ -24,6 +24,7 @@ module.exports = (app) => {
     const cUser = require('../controllers/user.js');
     const cGeolocation = require('../controllers/geolocation.js');
     const cReport = require('../controllers/report.js');
+    const cAds = require('../controllers/ads.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -67,4 +68,9 @@ module.exports = (app) => {
     app.post('/report', middlewareHere, middlewarePackageName, cReport.create);
     app.patch('/report', middlewareHere, middlewarePackageName, cReport.update);
     app.delete('/report', middlewareHere, middlewarePackageName, cReport.delete);
+
+    app.get('/ads', middlewareHere, middlewarePackageName, cAds.list);
+    app.post('/ads', middlewareHere, middlewarePackageName, cAds.create);
+    app.patch('/ads', middlewareHere, middlewarePackageName, cAds.update);
+    app.delete('/ads', middlewareHere, middlewarePackageName, cAds.delete);
 }

@@ -32,5 +32,6 @@ db.cities = require("./cities.js")(sequelize, Sequelize);
 db.districts = require("./districts.js")(sequelize, Sequelize);
 db.villages = require("./villages.js")(sequelize, Sequelize);
 db.reports = require("./reports.js")(sequelize, Sequelize);
+db.ads = require("./ads.js")(sequelize, Sequelize);
 
 module.exports = db;
