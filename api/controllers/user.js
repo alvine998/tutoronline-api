@@ -8,8 +8,8 @@ require('dotenv').config()
 // Retrieve and return all notes from the database.
 exports.list = async (req, res) => {
     try {
-        const size = req.query.size || 10;
-        const page = req.query.page || 0;
+        const size = +req.query.size || 10;
+        const page = +req.query.page || 0;
         const offset = size * page;
 
         const result = await users.findAndCountAll({
