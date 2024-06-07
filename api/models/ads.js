@@ -96,7 +96,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     transmission: {
-      type: DataTypes.ENUM('AT','MT'),
+      type: DataTypes.ENUM('AT','MT','CVT'),
+      allowNull: true
+    },
+    fuel_type: {
+      type: DataTypes.ENUM('bensin','diesel','hybrid','ev'),
       allowNull: true
     },
     year: {
