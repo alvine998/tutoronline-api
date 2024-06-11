@@ -139,3 +139,59 @@ exports.delete = async (req, res) => {
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
+
+exports.updateCalls = async (req, res) => {
+    try {
+        const result = await ads.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        if (!result) {
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
+        }
+        const payload = {
+            calls: result.calls + 1
+        }
+        const onUpdate = await ads.update(payload, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        res.status(200).send({ message: "Berhasil menambah calls", update: onUpdate })
+        return
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+    }
+}
+
+exports.updateViews = async (req, res) => {
+    try {
+        const result = await ads.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        if (!result) {
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
+        }
+        const payload = {
+            views: result.views + 1
+        }
+        const onUpdate = await ads.update(payload, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        res.status(200).send({ message: "Berhasil menambah calls", update: onUpdate })
+        return
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+    }
+}

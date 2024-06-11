@@ -123,6 +123,16 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
+    views: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+      defaultValue: 0
+    },
+    calls: {
+      type: DataTypes.BIGINT,
+      allowNull: true,
+      defaultValue: 0
+    },
     certificates: {
       type: DataTypes.JSON,
       allowNull: true
