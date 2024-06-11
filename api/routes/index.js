@@ -71,6 +71,8 @@ module.exports = (app) => {
 
     app.get('/ads', middlewareHere, middlewarePackageName, cAds.list);
     app.post('/ads', middlewareHere, middlewarePackageName, cAds.create);
+    app.post('/ads/calls', middlewareHere, middlewarePackageName, cAds.updateCalls);
+    app.post('/ads/views', middlewareHere, middlewarePackageName, cAds.updateViews);
     app.patch('/ads', middlewareHere, middlewarePackageName, cAds.update);
     app.delete('/ads', middlewareHere, middlewarePackageName, cAds.delete);
 }
