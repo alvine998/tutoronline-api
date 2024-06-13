@@ -164,6 +164,7 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
+        console.log({ ...result, password: "" });
         return res.status(200).send({ message: "Berhasil Login", user: { ...result, password: "" } })
     } catch (error) {
         console.log(error);
