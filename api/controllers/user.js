@@ -145,11 +145,12 @@ exports.login = async (req, res) => {
     try {
         const { identity, password } = req.body;
         if (!identity || !password) {
-            return res.status(404).send({ message: "Masukkan Email dan Password!" })
+            return res.status(404).send({ message: "Masukkan Email / No Telepon dan Password!" })
         }
         const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
+                status: { [Op.eq]: 1 },
                 [Op.or]: {
                     phone: req.body.identity,
                     email: req.body.identity
