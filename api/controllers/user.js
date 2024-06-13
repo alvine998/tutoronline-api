@@ -95,7 +95,7 @@ exports.update = async (req, res) => {
             return res.status(400).send({ message: "Data tidak ditemukan!" })
         }
         let payload = {}
-        if (req.body.password) {
+        if (req.body.password !== "") {
             const salt = await encrypt.genSalt(10)
             const password = await encrypt.hash(req.body.password, salt)
             payload = {
