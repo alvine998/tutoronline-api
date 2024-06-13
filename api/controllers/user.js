@@ -17,7 +17,7 @@ exports.list = async (req, res) => {
                 deleted: { [Op.eq]: 0 },
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.role && { role: { [Op.in]: [req.query.role] } },
+                ...req.query.role && { role: { [Op.in]: req.query.role.split(",") } },
                 ...req.query.isCustomer == '1' && { google_id: { [Op.not]: null } },
                 ...req.query.isCustomer == '0' && { google_id: { [Op.is]: null } },
                 ...req.query.google_id && { google_id: { [Op.eq]: req.query.google_id } },
