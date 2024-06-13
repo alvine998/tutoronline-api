@@ -154,7 +154,8 @@ exports.login = async (req, res) => {
                     phone: req.body.identity,
                     email: req.body.identity
                 }
-            }
+            },
+            attributes: { exclude: ['deleted', 'password'] }
         })
         if (!result) {
             return res.status(404).send({ message: "Akun Belum Terdaftar!" })
