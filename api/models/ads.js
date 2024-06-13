@@ -123,6 +123,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
+    building: {
+      type: DataTypes.DOUBLE,
+      allowNull: true
+    },
     views: {
       type: DataTypes.BIGINT,
       allowNull: true,

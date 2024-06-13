@@ -63,6 +63,21 @@ exports.create = async (req, res) => {
                 })
             }
         })
+        const existUser = await users.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                [Op.or]: {
+                    email: { [Op.eq]: req.body.email },
+                    phone: { [Op.eq]: req.body.phone }
+                }
+            }
+        })
+        if (!result) {
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
+        }
+        if (existUser) {
+            return res.status(400).send({ message: "Email / No Telepon Telah Terdaftar!" })
+        }
         const salt = await encrypt.genSalt(10)
         const password = await encrypt.hash(req.body.password, salt)
         const payload = {
@@ -88,7 +103,9 @@ exports.update = async (req, res) => {
         const result = await users.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]: req.body.id }
+                id: { [Op.eq]: req.body.id },
+                email: { [Op.eq]: req.body.email },
+                phone: { [Op.eq]: req.body.phone },
             }
         })
         if (!result) {
