@@ -172,8 +172,8 @@ exports.login = async (req, res) => {
                     phone: req.body.identity,
                     email: req.body.identity
                 },
-                attributes: { exclude: ['deleted', 'password'] },
             },
+            attributes: { exclude: ['deleted', 'password'] },
         })
         return res.status(200).send({ message: "Berhasil Login", user: result2 })
     } catch (error) {
