@@ -12,6 +12,17 @@ exports.list = async (req, res) => {
         const page = +req.query.page || 0;
         const offset = size * page;
 
+        let order = [['created_on', 'DESC']];
+        if (req.query.sort == "maxprice") {
+            order = [['price', 'DESC']]
+        }
+        if (req.query.sort == "maxprice") {
+            order = [['price', 'ASC']]
+        }
+        if (req.query.sort == "newest") {
+            order = [['created_on', 'DESC']]
+        }
+
         const result = await ads.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
@@ -29,6 +40,7 @@ exports.list = async (req, res) => {
                 ...req.query.ownership && { ownership: { [Op.eq]: req.query.ownership } },
                 ...req.query.year && { year: { [Op.eq]: req.query.year } },
                 ...req.query.transmission && { transmission: { [Op.eq]: req.query.transmission } },
+                ...req.query.fuel_type && { fuel_type: { [Op.eq]: req.query.fuel_type } },
                 ...req.query.km && { km: { [Op.eq]: req.query.km } },
                 ...req.query.color && { color: { [Op.eq]: req.query.color } },
                 ...req.query.status && { status: { [Op.eq]: req.query.status } },
@@ -38,9 +50,7 @@ exports.list = async (req, res) => {
                     ]
                 },
             },
-            order: [
-                ['created_on', 'DESC'],
-            ],
+            order: order,
             attributes: { exclude: ['deleted'] },
             ...req.query.pagination == 'true' && {
                 limit: size,
