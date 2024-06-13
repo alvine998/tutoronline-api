@@ -16,7 +16,7 @@ exports.list = async (req, res) => {
         if (req.query.sort == "maxprice") {
             order = [['price', 'DESC']]
         }
-        if (req.query.sort == "maxprice") {
+        if (req.query.sort == "minprice") {
             order = [['price', 'ASC']]
         }
         if (req.query.sort == "newest") {
