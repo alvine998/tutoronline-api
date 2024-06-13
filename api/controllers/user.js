@@ -156,7 +156,6 @@ exports.login = async (req, res) => {
                     email: req.body.identity
                 }
             },
-            attributes: { exclude: ['deleted', 'password'] }
         })
         if (!result) {
             return res.status(404).send({ message: "Akun Belum Terdaftar!" })
@@ -165,7 +164,7 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
-        return res.status(200).send({ message: "Berhasil Login", user: result })
+        return res.status(200).send({ message: "Berhasil Login", user: { ...result, password: "" } })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
