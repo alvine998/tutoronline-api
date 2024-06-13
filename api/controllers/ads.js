@@ -32,6 +32,11 @@ exports.list = async (req, res) => {
                 ...req.query.brand_id && { brand_id: { [Op.in]: req.query.brand_id.split(",") } },
                 ...req.query.type_id && { type_id: { [Op.in]: req.query.type_id.split(",") } },
                 ...req.query.category_id && { category_id: { [Op.eq]: req.query.category_id } },
+                ...req.query.max && req.query.min && {
+                    price: {
+                        [Op.between]: [parseFloat(req.query.min), parseFloat(req.query.max)]
+                    }
+                },
                 ...req.query.subcategory_id && { subcategory_id: { [Op.eq]: req.query.subcategory_id } },
                 ...req.query.province_id && { province_id: { [Op.eq]: req.query.province_id } },
                 ...req.query.city_id && { city_id: { [Op.eq]: req.query.city_id } },
