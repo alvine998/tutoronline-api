@@ -37,6 +37,16 @@ exports.list = async (req, res) => {
                         [Op.between]: [parseFloat(req.query.min), parseFloat(req.query.max)]
                     }
                 },
+                ...req.query.maxArea && req.query.minArea && {
+                    area: {
+                        [Op.between]: [parseFloat(req.query.minArea), parseFloat(req.query.maxArea)]
+                    }
+                },
+                ...req.query.maxBuilding && req.query.minBuilding && {
+                    building: {
+                        [Op.between]: [parseFloat(req.query.minBuilding), parseFloat(req.query.maxBuilding)]
+                    }
+                },
                 ...req.query.subcategory_id && { subcategory_id: { [Op.eq]: req.query.subcategory_id } },
                 ...req.query.province_id && { province_id: { [Op.eq]: req.query.province_id } },
                 ...req.query.city_id && { city_id: { [Op.eq]: req.query.city_id } },
