@@ -164,8 +164,18 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
-        console.log({ ...result, password: "" });
-        return res.status(200).send({ message: "Berhasil Login", user: { ...result, password: "" } })
+        const result2 = await users.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                status: { [Op.eq]: 1 },
+                [Op.or]: {
+                    phone: req.body.identity,
+                    email: req.body.identity
+                },
+                attributes: { exclude: ['deleted', 'password'] },
+            },
+        })
+        return res.status(200).send({ message: "Berhasil Login", user: result2 })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
