@@ -70,9 +70,6 @@ exports.create = async (req, res) => {
                 phone: { [Op.eq]: req.body.phone }
             }
         })
-        if (!result) {
-            return res.status(400).send({ message: "Data tidak ditemukan!" })
-        }
         if (existUser) {
             return res.status(400).send({ message: "Email / No Telepon Telah Terdaftar!" })
         }
