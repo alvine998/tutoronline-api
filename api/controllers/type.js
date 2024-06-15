@@ -26,7 +26,7 @@ exports.list = async (req, res) => {
                 },
             },
             order: [
-                ['created_on', 'DESC'],
+                ['name', 'ASC'],
             ],
             attributes: { exclude: ['deleted'] },
             ...req.query.pagination == 'true' && {
