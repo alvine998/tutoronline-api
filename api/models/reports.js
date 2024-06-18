@@ -7,6 +7,14 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
+    ads_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    ads_name: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
     partner_code: {
       type: DataTypes.STRING(250),
       allowNull: false

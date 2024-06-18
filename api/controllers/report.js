@@ -18,6 +18,7 @@ exports.list = async (req, res) => {
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
                 ...req.query.user_id && { user_id: { [Op.eq]: req.query.user_id } },
+                ...req.query.ads_id && { ads_id: { [Op.eq]: req.query.ads_id } },
                 ...req.query.status && { status: { [Op.in]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
@@ -51,7 +52,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['title', 'description', 'user_id']?.map(value => {
+        ['title', 'description', 'user_id', 'ads_id']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
