@@ -1,12 +1,12 @@
 var DataTypes = require("sequelize").DataTypes;
-var _ads = require("./ads");
+var _notifications = require("./notifications");
 
 function initModels(sequelize) {
-  var ads = _ads(sequelize, DataTypes);
+  var notifications = _notifications(sequelize, DataTypes);
 
 
   return {
-    ads,
+    notifications,
   };
 }
 module.exports = initModels;
