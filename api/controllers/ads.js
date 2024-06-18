@@ -99,9 +99,26 @@ exports.create = async (req, res) => {
                 })
             }
         })
+        // Get today's date
+        let today = new Date();
+
+        // Subtract 200 days
+        let pastDate = new Date();
+        pastDate.setDate(today.getDate() - 200);
+
+        // Format the date (optional)
+        let day = pastDate.getDate();
+        let month = pastDate.getMonth() + 1; // Months are zero-based in JavaScript
+        let year = pastDate.getFullYear();
+
+        // Pad single digit day and month with a leading zero (optional)
+        day = day < 10 ? '0' + day : day;
+        month = month < 10 ? '0' + month : month;
+
         const payload = {
             ...req.body,
             partner_code: req.header('x-partner-code'),
+            expired_on: `${year}-${month}-${day}`
         };
         const result = await ads.create(payload)
         return res.status(200).send({
