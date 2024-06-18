@@ -25,19 +25,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     brand_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     brand_name: {
       type: DataTypes.STRING(250),
-      allowNull: false
+      allowNull: true
     },
     type_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     type_name: {
       type: DataTypes.STRING(250),
-      allowNull: false
+      allowNull: true
     },
     category_id: {
       type: DataTypes.INTEGER,
