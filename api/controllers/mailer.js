@@ -19,6 +19,7 @@ exports.sendEmail = async (req, res) => {
         const existUser = await users.findOne({
             where: {
                 email: { [Op.eq]: req.body.to },
+                role: { [Op.eq]: 'customer' },
                 deleted: { [Op.eq]: 0 }
             }
         })
