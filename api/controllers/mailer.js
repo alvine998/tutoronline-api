@@ -27,7 +27,7 @@ exports.sendEmail = async (req, res) => {
         if (!existUser) {
             return res.status(400).send({
                 status: "not found",
-                items: "Email belum terdaftar",
+                error_message: "Email belum terdaftar",
                 code: 400
             })
         }
