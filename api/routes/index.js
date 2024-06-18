@@ -26,6 +26,7 @@ module.exports = (app) => {
     const cReport = require('../controllers/report.js');
     const cAds = require('../controllers/ads.js');
     const cNotification = require('../controllers/notification.js');
+    const cMailer = require('../controllers/mailer.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -33,6 +34,7 @@ module.exports = (app) => {
     app.delete('/partner', middlewareHere, cPartner.delete);
 
     app.post('/file-upload', upload.single('file'), cUpload.upload);
+    app.post('/sendmail', middlewareHere, cMailer.sendEmail);
 
     app.get('/provinces', middlewareHere, cGeolocation.listProvince);
     app.get('/cities', middlewareHere, cGeolocation.listCity);
