@@ -146,6 +146,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: 0
     },
+    expired_on: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     created_on: {
       type: DataTypes.DATE,
       allowNull: false,
