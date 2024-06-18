@@ -1,4 +1,7 @@
 const nodemailer = require('nodemailer');
+const db = require('../models')
+const users = db.users
+const Op = db.Sequelize.Op
 require('dotenv').config();
 
 exports.sendEmail = async (req, res) => {
@@ -12,6 +15,21 @@ exports.sendEmail = async (req, res) => {
                 })
             }
         })
+
+        const existUser = await users.findOne({
+            where: {
+                email: { [Op.eq]: req.body.to },
+                deleted: { [Op.eq]: 0 }
+            }
+        })
+
+        if (!existUser) {
+            return res.status(400).send({
+                status: "not found",
+                items: "Email belum terdaftar",
+                code: 400
+            })
+        }
 
         const transport = nodemailer.createTransport({
             service: 'gmail',
