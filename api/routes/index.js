@@ -25,6 +25,7 @@ module.exports = (app) => {
     const cGeolocation = require('../controllers/geolocation.js');
     const cReport = require('../controllers/report.js');
     const cAds = require('../controllers/ads.js');
+    const cNotification = require('../controllers/notification.js');
 
     app.get('/partners', middlewareHere, cPartner.list);
     app.post('/partner', middlewareHere, cPartner.create);
@@ -68,6 +69,11 @@ module.exports = (app) => {
     app.post('/report', middlewareHere, middlewarePackageName, cReport.create);
     app.patch('/report', middlewareHere, middlewarePackageName, cReport.update);
     app.delete('/report', middlewareHere, middlewarePackageName, cReport.delete);
+
+    app.get('/notifications', middlewareHere, middlewarePackageName, cNotification.list);
+    app.post('/notification', middlewareHere, middlewarePackageName, cNotification.create);
+    app.patch('/notification', middlewareHere, middlewarePackageName, cNotification.update);
+    app.delete('/notification', middlewareHere, middlewarePackageName, cNotification.delete);
 
     app.get('/ads', middlewareHere, middlewarePackageName, cAds.list);
     app.post('/ads', middlewareHere, middlewarePackageName, cAds.create);
