@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('notifications', {
     id: {
       autoIncrement: true,
@@ -29,7 +29,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     status: {
       type: DataTypes.TINYINT,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 0
     },
     created_on: {
       type: DataTypes.DATE,
