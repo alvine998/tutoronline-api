@@ -42,7 +42,6 @@ exports.sendEmail = async (req, res) => {
                 id: { [Op.eq]: existUser.id }
             }
         })
-
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -62,7 +61,8 @@ exports.sendEmail = async (req, res) => {
         })
         return res.status(200).send({
             status: "success",
-            items: "Email sent",
+            message: "Email Sent",
+            items: existUser,
             code: 200
         })
     } catch (error) {
