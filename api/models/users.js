@@ -27,6 +27,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(250),
       allowNull: false
     },
+    reset_otp: {
+      type: DataTypes.STRING(6),
+      allowNull: true
+    },
+    reset_status: {
+      type: DataTypes.TINYINT,
+      allowNull: true,
+      defaultValue: 0
+    },
     role: {
       type: DataTypes.ENUM('admin','super_admin','customer'),
       allowNull: false
