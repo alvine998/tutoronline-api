@@ -42,6 +42,7 @@ exports.sendEmail = async (req, res) => {
                 id: { [Op.eq]: existUser.id }
             }
         })
+        console.log(existUser,'existt');
 
         const transport = nodemailer.createTransport({
             service: 'gmail',
