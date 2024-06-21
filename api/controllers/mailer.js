@@ -32,6 +32,16 @@ exports.sendEmail = async (req, res) => {
                 code: 400
             })
         }
+        const otp = generateRandomSixDigitNumber()
+        await users.update({
+            reset_otp: otp,
+            reset_status: existUser.reset_status + 1
+        }, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: existUser.id }
+            }
+        })
 
         const transport = nodemailer.createTransport({
             service: 'gmail',
@@ -40,7 +50,6 @@ exports.sendEmail = async (req, res) => {
                 pass: process.env.PASSWORD
             }
         });
-        const otp = generateRandomSixDigitNumber()
         const payload = {
             ...req.body,
             subject: "Reset Password",
@@ -50,15 +59,6 @@ exports.sendEmail = async (req, res) => {
             if (error) throw Error(error);
             console.log('email send successfully');
             console.log(info);
-        })
-        const onUpdate = await users.update({
-            reset_otp: otp,
-            reset_status: existUser.reset_status + 1
-        }, {
-            where: {
-                deleted: { [Op.eq]: 0 },
-                id: { [Op.eq]:existUser.id}
-            }
         })
         return res.status(200).send({
             status: "success",
