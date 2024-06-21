@@ -197,3 +197,32 @@ exports.login = async (req, res) => {
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
+
+exports.verificationResetPassword = async (req, res) => {
+    try {
+        const result = await users.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id },
+                email: { [Op.eq]: req.body.email },
+                reset_otp: { [Op.eq]: req.body.otp },
+            }
+        })
+        if (!result) {
+            return res.status(400).send({ message: "Kode OTP Salah!" })
+        }
+        const onUpdate = await users.update({
+            reset_otp: null
+        }, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
+        return
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+    }
+}

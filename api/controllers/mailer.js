@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
-const db = require('../models')
+const db = require('../models');
+const { generateRandomSixDigitNumber } = require('../../utils');
 const users = db.users
 const Op = db.Sequelize.Op
 require('dotenv').config();
@@ -39,14 +40,20 @@ exports.sendEmail = async (req, res) => {
                 pass: process.env.PASSWORD
             }
         });
+        const otp = generateRandomSixDigitNumber()
         const payload = {
             ...req.body,
+            subject: "Reset Password",
+            text: `Gunakan Kode OTP ini untuk verifikasi pemulihan password: ${otp}`,
         };
         transport.sendMail(payload, function (error, info) {
             if (error) throw Error(error);
             console.log('email send successfully');
             console.log(info);
         })
+        existUser.reset_otp = otp;
+        existUser.reset_status = 1;
+        await existUser.save();
         return res.status(200).send({
             status: "success",
             items: "Email sent",

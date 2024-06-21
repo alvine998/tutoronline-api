@@ -66,6 +66,7 @@ module.exports = (app) => {
     app.patch('/user', middlewareHere, middlewarePackageName, cUser.update);
     app.delete('/user', middlewareHere, middlewarePackageName, cUser.delete);
     app.post('/user/login', middlewareHere, middlewarePackageName, cUser.login);
+    app.post('/user/verification', middlewareHere, middlewarePackageName, cUser.verificationResetPassword);
 
     app.get('/reports', middlewareHere, middlewarePackageName, cReport.list);
     app.post('/report', middlewareHere, middlewarePackageName, cReport.create);
