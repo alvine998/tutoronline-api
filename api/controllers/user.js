@@ -219,7 +219,6 @@ exports.verificationResetPassword = async (req, res) => {
                 id: { [Op.eq]: req.body.id }
             }
         })
-        console.log(result);
         res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
         return
     } catch (error) {
