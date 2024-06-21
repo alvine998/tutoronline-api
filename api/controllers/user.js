@@ -99,8 +99,7 @@ exports.update = async (req, res) => {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id },
-                email: { [Op.eq]: req.body.email },
-                phone: { [Op.eq]: req.body.phone },
+                email: { [Op.eq]: req.body.email }
             }
         })
         if (!result) {
