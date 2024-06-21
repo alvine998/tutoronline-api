@@ -51,9 +51,15 @@ exports.sendEmail = async (req, res) => {
             console.log('email send successfully');
             console.log(info);
         })
-        existUser.reset_otp = otp;
-        existUser.reset_status = 1;
-        await existUser.save();
+        const onUpdate = await users.update({
+            reset_otp: otp,
+            reset_status: existUser.reset_status + 1
+        }, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]:existUser.id}
+            }
+        })
         return res.status(200).send({
             status: "success",
             items: "Email sent",
