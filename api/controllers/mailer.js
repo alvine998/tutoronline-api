@@ -7,7 +7,7 @@ require('dotenv').config();
 
 exports.sendEmail = async (req, res) => {
     try {
-        ['text', 'subject', 'from', 'to']?.map(value => {
+        ['from', 'to']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
