@@ -89,7 +89,7 @@ exports.list = async (req, res) => {
 exports.create = async (req, res) => {
     try {
         ['title', 'description', 'user_id', 'price', 'category_id', 'subcategory_id', 'province_id',
-            'city_id', 'district_id', 'images'
+            'city_id', 'district_id', 'images', 'wa'
         ]?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({

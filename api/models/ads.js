@@ -63,6 +63,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    wa: {
+      type: DataTypes.STRING(13),
+      allowNull: false
+    },
     province_id: {
       type: DataTypes.INTEGER,
       allowNull: false
