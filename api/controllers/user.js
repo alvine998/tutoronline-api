@@ -115,11 +115,7 @@ exports.update = async (req, res) => {
             }
         } else {
             payload = {
-                ...req.body.name && { name: req.body.name },
-                ...req.body.email && { email: req.body.email },
-                ...req.body.phone && { phone: req.body.phone },
-                ...req.body.status && { status: req.body.status },
-                ...req.body.role && { role: req.body.role }
+                ...req.body
             }
         }
         console.log(payload,'payload');
