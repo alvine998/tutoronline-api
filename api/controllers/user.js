@@ -116,10 +116,10 @@ exports.update = async (req, res) => {
         } else {
             payload = {
                 ...req.body.name && { name: req.body.name },
-                ...req.body.name && { email: req.body.email },
-                ...req.body.name && { phone: req.body.phone },
-                ...req.body.name && { status: req.body.status },
-                ...req.body.name && { role: req.body.role }
+                ...req.body.email && { email: req.body.email },
+                ...req.body.phone && { phone: req.body.phone },
+                ...req.body.status && { status: req.body.status },
+                ...req.body.role && { role: req.body.role }
             }
         }
         const onUpdate = await users.update(payload, {
