@@ -2,7 +2,7 @@
 const db = require('../models')
 const users = db.users
 const Op = db.Sequelize.Op
-const encrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
 // Retrieve and return all notes from the database.
@@ -73,8 +73,8 @@ exports.create = async (req, res) => {
         if (existUser) {
             return res.status(400).send({ message: "Email / No Telepon Telah Terdaftar!" })
         }
-        const salt = await encrypt.genSalt(10)
-        const password = await encrypt.hash(req.body.password, salt)
+        const salt = await bcrypt.genSalt(10)
+        const password = await bcrypt.hash(req.body.password, salt)
         const payload = {
             ...req.body,
             partner_code: req.header('x-partner-code'),
@@ -106,9 +106,9 @@ exports.update = async (req, res) => {
             return res.status(400).send({ message: "Data tidak ditemukan!" })
         }
         let payload = {}
-        if (req.body.password !== "") {
-            const salt = await encrypt.genSalt(10)
-            const password = await encrypt.hash(req.body.password, salt)
+        if (req.body.password && req.body.password !== "") {
+            const salt = await bcrypt.genSalt(10)
+            const password = await bcrypt.hash(req.body.password, salt)
             payload = {
                 ...req.body,
                 password: password
@@ -118,7 +118,7 @@ exports.update = async (req, res) => {
                 ...req.body
             }
         }
-        console.log(payload,'payload');
+        console.log(payload, 'payload');
         const onUpdate = await users.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
@@ -172,7 +172,7 @@ exports.login = async (req, res) => {
         if (!result) {
             return res.status(404).send({ message: "Akun Belum Terdaftar!" })
         }
-        const isCompare = await encrypt.compare(password, result.password)
+        const isCompare = await bcrypt.compare(password, result.password)
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
