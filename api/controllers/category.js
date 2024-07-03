@@ -56,6 +56,20 @@ exports.create = async (req, res) => {
                 })
             }
         })
+
+        const existCat = await categories.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                seq: { [Op.eq]: req.body.seq }
+            }
+        })
+        if(existCat){
+            return res.status(400).send({
+                status: "error",
+                message: "Nomor Urutan Sudah Digunakan, Silahkan Gunakan No Urutan Lain!",
+                code: 400
+            })
+        }
         const payload = {
             ...req.body,
             partner_code: req.header('x-partner-code')
