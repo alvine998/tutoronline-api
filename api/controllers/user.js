@@ -122,6 +122,7 @@ exports.update = async (req, res) => {
                 ...req.body.role && { role: req.body.role }
             }
         }
+        console.log(payload,'payload');
         const onUpdate = await users.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
