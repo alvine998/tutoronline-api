@@ -53,7 +53,7 @@ exports.list = async (req, res) => {
                 ...req.query.district_id && { district_id: { [Op.eq]: req.query.district_id } },
                 ...req.query.village_id && { village_id: { [Op.eq]: req.query.village_id } },
                 ...req.query.ownership && { ownership: { [Op.eq]: req.query.ownership } },
-                ...req.query.year && { year: { [Op.eq]: req.query.year } },
+                ...req.query.year_start && req.query.year_end && { year: { [Op.between]: [req.query.year_start, req.query.year_end] } },
                 ...req.query.transmission && { transmission: { [Op.eq]: req.query.transmission } },
                 ...req.query.fuel_type && { fuel_type: { [Op.eq]: req.query.fuel_type } },
                 ...req.query.km && { km: { [Op.eq]: req.query.km } },
