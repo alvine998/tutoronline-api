@@ -194,6 +194,40 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.loginbygoogle = async (req, res) => {
+    try {
+        const { email, phoneNumber, uid, displayName, photoUrl } = req.body;
+        if (!email || !uid) {
+            return res.status(404).send({ message: "Parameter tidak lengkap!" })
+        }
+        const result = await users.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                status: { [Op.eq]: 1 },
+                email: { [Op.eq]: email },
+                google_id: { [Op.eq]: uid }
+            },
+        })
+        const payload = {
+            ...req.body,
+            partner_code: req.header('x-partner-code'),
+            password: "loginbygoogle",
+            google_id: uid,
+            name: displayName,
+            phone: phoneNumber || null,
+            role: 'customer',
+            image: photoUrl || null
+        };
+        if (!result) {
+            await users.create(payload)
+        }
+        return res.status(200).send({ message: "Berhasil Login", user: result || payload })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+    }
+}
+
 exports.verificationResetPassword = async (req, res) => {
     try {
         const result = await users.findOne({
