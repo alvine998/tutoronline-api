@@ -118,7 +118,6 @@ exports.update = async (req, res) => {
                 ...req.body
             }
         }
-        console.log(payload, 'payload');
         const onUpdate = await users.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
@@ -198,7 +197,7 @@ exports.loginbygoogle = async (req, res) => {
     try {
         const { email, phoneNumber, uid, displayName, photoUrl } = req.body;
         if (!email || !uid) {
-            return res.status(404).send({ message: "Parameter tidak lengkap!" })
+            return res.status(400).send({ message: "Parameter tidak lengkap!" })
         }
         const result = await users.findOne({
             where: {
@@ -218,10 +217,25 @@ exports.loginbygoogle = async (req, res) => {
             role: 'customer',
             image: photoUrl || null
         };
-        if (!result) {
+        const existEmail = await users.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                status: { [Op.eq]: 1 },
+                email: { [Op.eq]: email }
+            },
+        })
+        if (existEmail) {
+            await users.update({ google_id: uid }, {
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    id: { [Op.eq]: existEmail.id }
+                }
+            })
+        }
+        if (!result && !existEmail) {
             await users.create(payload)
         }
-        return res.status(200).send({ message: "Berhasil Login", user: result || payload })
+        return res.status(200).send({ message: "Berhasil Login", user: result ? result : payload })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
