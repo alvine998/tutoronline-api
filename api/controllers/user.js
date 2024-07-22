@@ -235,7 +235,8 @@ exports.loginbygoogle = async (req, res) => {
         if (!result && !existEmail) {
             await users.create(payload)
         }
-        return res.status(200).send({ message: "Berhasil Login", user: result ? result : payload })
+        console.log(result,'res');
+        return res.status(200).send({ message: "Berhasil Login", user: result || existEmail || payload })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
