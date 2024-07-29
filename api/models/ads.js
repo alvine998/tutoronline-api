@@ -131,6 +131,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DOUBLE,
       allowNull: true
     },
+    condition: {
+      type: DataTypes.ENUM('bekas','baru'),
+      allowNull: false,
+      defaultValue: 'baru'
+    },
     views: {
       type: DataTypes.BIGINT,
       allowNull: true,
