@@ -27,7 +27,7 @@ exports.list = async (req, res) => {
             where: {
                 deleted: { [Op.eq]: 0 },
                 partner_code: { [Op.eq]: req.header('x-partner-code') },
-                ...req.query.id && { id: { [Op.eq]: req.query.id } },
+                ...req.query.id && { id: { [Op.in]: req.query.id.split(",") } },
                 ...req.query.user_id && { user_id: { [Op.eq]: req.query.user_id } },
                 ...req.query.brand_id && { brand_id: { [Op.in]: req.query.brand_id.split(",") } },
                 ...req.query.type_id && { type_id: { [Op.in]: req.query.type_id.split(",") } },
