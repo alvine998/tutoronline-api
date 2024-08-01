@@ -36,11 +36,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-    console.log(path.join(__dirname, "upload/images"));
-    res.json({ message: "Welcome to API Marketplace" });
+    res.json({ message: "Welcome to API tutor online" });
 });
-
-app.use(express.static(path.join("upload")))
 
 require('./api/routes')(app);
 

@@ -20,19 +20,8 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.partners = require("./partners.js")(sequelize, Sequelize);
-db.categories = require("./categories.js")(sequelize, Sequelize);
-db.subcategories = require("./subcategories.js")(sequelize, Sequelize);
-db.partners = require("./partners.js")(sequelize, Sequelize);
-db.brands = require("./brands.js")(sequelize, Sequelize);
-db.types = require("./types.js")(sequelize, Sequelize);
-db.users = require("./users.js")(sequelize, Sequelize);
-db.provinces = require("./provinces.js")(sequelize, Sequelize);
-db.cities = require("./cities.js")(sequelize, Sequelize);
-db.districts = require("./districts.js")(sequelize, Sequelize);
-db.villages = require("./villages.js")(sequelize, Sequelize);
-db.reports = require("./reports.js")(sequelize, Sequelize);
-db.ads = require("./ads.js")(sequelize, Sequelize);
-db.notifications = require("./notifications.js")(sequelize, Sequelize);
+db.admins = require("./admins.js")(sequelize, Sequelize);
+db.talents = require("./talents.js")(sequelize, Sequelize);
+db.tutors = require("./tutors.js")(sequelize, Sequelize);
 
 module.exports = db;

@@ -1,36 +1,37 @@
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('notifications', {
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('admins', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    partner_code: {
+    name: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    user_name: {
+    email: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    title: {
+    username: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    content: {
-      type: DataTypes.TEXT,
+    password: {
+      type: DataTypes.STRING(250),
       allowNull: false
+    },
+    role: {
+      type: DataTypes.ENUM('admin','super_admin'),
+      allowNull: false,
+      defaultValue: "admin"
     },
     status: {
       type: DataTypes.TINYINT,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 1
     },
     created_on: {
       type: DataTypes.DATE,
@@ -48,7 +49,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'notifications',
+    tableName: 'admins',
     timestamps: false,
     indexes: [
       {

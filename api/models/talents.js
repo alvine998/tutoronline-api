@@ -1,27 +1,52 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('categories', {
+  return sequelize.define('talents', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    partner_code: {
-      type: DataTypes.STRING(250),
-      allowNull: false
-    },
     name: {
       type: DataTypes.STRING(250),
       allowNull: false
     },
-    icon: {
-      type: DataTypes.TEXT,
+    username: {
+      type: DataTypes.STRING(250),
       allowNull: false
     },
-    seq: {
+    email: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    phone: {
+      type: DataTypes.STRING(13),
+      allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING(250),
+      allowNull: false
+    },
+    age: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    occupation: {
+      type: DataTypes.STRING(250),
+      allowNull: true
+    },
+    verified_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      defaultValue: 1
     },
     created_on: {
       type: DataTypes.DATE,
@@ -39,7 +64,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'categories',
+    tableName: 'talents',
     timestamps: false,
     indexes: [
       {
