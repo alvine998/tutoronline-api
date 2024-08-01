@@ -1,6 +1,6 @@
 
 const db = require('../models')
-const admins = db.admins
+const tutors = db.tutors
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -12,15 +12,25 @@ exports.list = async (req, res) => {
         const page = +req.query.page || 0;
         const offset = size * page;
 
-        const result = await admins.findAndCountAll({
+        const result = await tutors.findAndCountAll({
             where: {
                 deleted: { [Op.eq]: 0 },
                 ...req.query.id && { id: { [Op.eq]: req.query.id } },
-                ...req.query.role && { role: { [Op.in]: req.query.role.split(",") } },
+                ...req.query.gender && { gender: { [Op.eq]: req.query.gender } },
+                ...req.query.age && { age: { [Op.eq]: req.query.age } },
+                ...req.query.bank && { bank: { [Op.eq]: req.query.bank } },
+                ...req.query.research_method && { research_method: { [Op.eq]: req.query.research_method } },
+                ...req.query.consult_media_preference && { consult_media_preference: { [Op.eq]: req.query.consult_media_preference } },
+                ...req.query.verified == '1' && { verified_at: { [Op.not]: null } },
+                ...req.query.verified == '0' && { verified_at: { [Op.is]: null } },
+                ...req.query.status && { status: { [Op.eq]: req.query.status } },
                 ...req.query.search && {
                     [Op.or]: [
                         { name: { [Op.like]: `%${req.query.search}%` } },
-                        { email: { [Op.like]: `%${req.query.search}%` } }
+                        { email: { [Op.like]: `%${req.query.search}%` } },
+                        { phone: { [Op.like]: `%${req.query.search}%` } },
+                        { username: { [Op.like]: `%${req.query.search}%` } },
+                        { nik: { [Op.like]: `%${req.query.search}%` } },
                     ]
                 },
             },
@@ -50,7 +60,7 @@ exports.list = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        ['name', 'username', 'email', 'password', 'role']?.map(value => {
+        ['name', 'username', 'email', 'phone', 'address', 'age', 'password', 'gender', 'nik', 'ktp', 'photo', 'bank', 'account_number', 'educations', 'consult_media_preference']?.map(value => {
             if (!req.body[value]) {
                 return res.status(400).send({
                     status: "error",
@@ -59,11 +69,12 @@ exports.create = async (req, res) => {
                 })
             }
         })
-        const existUser = await admins.findOne({
+        const existUser = await tutors.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 email: { [Op.eq]: req.body.email },
-                username: { [Op.eq]: req.body.username }
+                username: { [Op.eq]: req.body.username },
+                phone: { [Op.eq]: req.body.phone },
             }
         })
         if (existUser) {
@@ -75,7 +86,7 @@ exports.create = async (req, res) => {
             ...req.body,
             password: password
         };
-        const result = await admins.create(payload)
+        const result = await tutors.create(payload)
         return res.status(200).send({
             status: "success",
             items: result,
@@ -90,7 +101,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await admins.findOne({
+        const result = await tutors.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id },
@@ -114,7 +125,7 @@ exports.update = async (req, res) => {
                 updated_on: new Date()
             }
         }
-        const onUpdate = await admins.update(payload, {
+        const onUpdate = await tutors.update(payload, {
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.body.id }
@@ -130,7 +141,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await admins.findOne({
+        const result = await tutors.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 id: { [Op.eq]: req.query.id }
@@ -145,7 +156,9 @@ exports.delete = async (req, res) => {
         res.status(200).send({ message: "Berhasil hapus data" })
         return
     } catch (error) {
-        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+        console.log(error);
+        res.status(500).send({ message: "Gagal mendapatkan data", error: error })
+        return
     }
 }
 
@@ -155,7 +168,7 @@ exports.login = async (req, res) => {
         if (!username || !password) {
             return res.status(400).send({ message: "Masukkan Username dan Password!" })
         }
-        const result = await admins.findOne({
+        const result = await tutors.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
@@ -169,7 +182,7 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
-        const result2 = await admins.findOne({
+        const result2 = await tutors.findOne({
             where: {
                 deleted: { [Op.eq]: 0 },
                 status: { [Op.eq]: 1 },
@@ -180,35 +193,35 @@ exports.login = async (req, res) => {
         return res.status(200).send({ message: "Berhasil Login", user: result2 })
     } catch (error) {
         console.log(error);
-        return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
+        return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
     }
 }
 
-// exports.verificationResetPassword = async (req, res) => {
-//     try {
-//         const result = await admins.findOne({
-//             where: {
-//                 deleted: { [Op.eq]: 0 },
-//                 id: { [Op.eq]: req.body.id },
-//                 email: { [Op.eq]: req.body.email },
-//                 reset_otp: { [Op.eq]: req.body.otp },
-//             }
-//         })
-//         if (!result) {
-//             return res.status(400).send({ message: "Kode OTP Salah!" })
-//         }
-//         const onUpdate = await admins.update({
-//             reset_otp: null
-//         }, {
-//             where: {
-//                 deleted: { [Op.eq]: 0 },
-//                 id: { [Op.eq]: req.body.id }
-//             }
-//         })
-//         res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
-//         return
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
-//     }
-// }
+exports.verificationTutor = async (req, res) => {
+    try {
+        const result = await tutors.findOne({
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id },
+                email: { [Op.eq]: req.body.email },
+            }
+        })
+        if (!result) {
+            return res.status(400).send({ message: "Data tidak ditemukan!" })
+        }
+        const onUpdate = await tutors.update({
+            verified_at: new Date(),
+            updated_on: new Date()
+        }, {
+            where: {
+                deleted: { [Op.eq]: 0 },
+                id: { [Op.eq]: req.body.id }
+            }
+        })
+        res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
+        return
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ message: "Gagal mendapatkan data", error: error })
+    }
+}
