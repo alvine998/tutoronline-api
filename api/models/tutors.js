@@ -84,6 +84,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.ENUM('online','offline','online/offline'),
       allowNull: false
     },
+    documents: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
     verified_at: {
       type: DataTypes.DATE,
       allowNull: true
