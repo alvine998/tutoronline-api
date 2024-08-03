@@ -70,7 +70,7 @@ exports.create = async (req, res) => {
             }
         })
         if (existUser) {
-            return res.status(400).send({ message: "Email / Username Telah Terdaftar!" })
+            return res.status(400).send({ status:"error", code:400, message: "Email / Username Telah Terdaftar!" })
         }
         const salt = await bcrypt.genSalt(10)
         const password = await bcrypt.hash(req.body.password, salt)
@@ -101,7 +101,7 @@ exports.update = async (req, res) => {
             }
         })
         if (!result) {
-            return res.status(400).send({ message: "Data tidak ditemukan!" })
+            return res.status(400).send({ status:"error", code:400, message: "Data tidak ditemukan!" })
         }
         let payload = {}
         if (req.body.password && req.body.password !== "") {
@@ -123,7 +123,7 @@ exports.update = async (req, res) => {
                 id: { [Op.eq]: req.body.id }
             }
         })
-        res.status(200).send({ message: "Berhasil ubah data", update: onUpdate })
+        res.status(200).send({ status:"success", code:200, message: "Berhasil ubah data", update: onUpdate })
         return
     } catch (error) {
         console.log(error);
@@ -140,12 +140,12 @@ exports.delete = async (req, res) => {
             }
         })
         if (!result) {
-            return res.status(404).send({ message: "Data tidak ditemukan!" })
+            return res.status(404).send({status:"error", code:400, message: "Data tidak ditemukan!" })
         }
         result.deleted = 1
         result.updated_on = new Date()
         await result.save()
-        res.status(200).send({ message: "Berhasil hapus data" })
+        res.status(200).send({ status:"success", code:200, message: "Berhasil hapus data" })
         return
     } catch (error) {
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
@@ -156,7 +156,7 @@ exports.login = async (req, res) => {
     try {
         const { username, password, role } = req.body;
         if (!username || !password) {
-            return res.status(400).send({ message: "Masukkan Username dan Password!" })
+            return res.status(400).send({ status:"error", code:400, message: "Masukkan Username dan Password!" })
         }
         let result = null
         if (role == "admin") {
@@ -187,11 +187,11 @@ exports.login = async (req, res) => {
         }
 
         if (!result) {
-            return res.status(404).send({ message: "Akun Belum Terdaftar!" })
+            return res.status(400).send({ status:"error", code:400, message: "Akun Belum Terdaftar!" })
         }
         const isCompare = await bcrypt.compare(password, result.password)
         if (!isCompare) {
-            return res.status(404).send({ message: "Password Salah!" })
+            return res.status(400).send({status:"error", code:400, message: "Password Salah!" })
         }
         let result2 = null
         if(role == "admin"){
@@ -223,7 +223,7 @@ exports.login = async (req, res) => {
             })
         }
         
-        return res.status(200).send({ message: "Berhasil Login", user: result2 })
+        return res.status(200).send({ status:"success", code:200, message: "Berhasil Login", user: result2 })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
