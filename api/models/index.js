@@ -23,5 +23,7 @@ db.sequelize = sequelize;
 db.admins = require("./admins.js")(sequelize, Sequelize);
 db.talents = require("./talents.js")(sequelize, Sequelize);
 db.tutors = require("./tutors.js")(sequelize, Sequelize);
+db.modules = require("./modules.js")(sequelize, Sequelize);
+db.talent_modules = require("./talent_modules.js")(sequelize, Sequelize);
 
 module.exports = db;

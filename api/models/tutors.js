@@ -85,8 +85,9 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     documents: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: true,
+      comment: "[{name:\"TOEFL\", image:\"toefl.jpg\"}]"
     },
     verified_at: {
       type: DataTypes.DATE,
