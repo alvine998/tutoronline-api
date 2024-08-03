@@ -1,6 +1,9 @@
 
 const db = require('../models')
 const admins = db.admins
+const tutors = db.tutors
+const talents = db.talents
+
 const Op = db.Sequelize.Op
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
@@ -151,17 +154,38 @@ exports.delete = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, role } = req.body;
         if (!username || !password) {
             return res.status(400).send({ message: "Masukkan Username dan Password!" })
         }
-        const result = await admins.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                status: { [Op.eq]: 1 },
-                username: { [Op.eq]: req.body.username }
-            },
-        })
+        let result = null
+        if (role == "admin") {
+            result = await admins.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+            })
+        }
+        else if (role == "tutor"){
+            result = await tutors.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+            })
+        } else {
+            result = await talents.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+            })
+        }
+
         if (!result) {
             return res.status(404).send({ message: "Akun Belum Terdaftar!" })
         }
@@ -169,46 +193,39 @@ exports.login = async (req, res) => {
         if (!isCompare) {
             return res.status(404).send({ message: "Password Salah!" })
         }
-        const result2 = await admins.findOne({
-            where: {
-                deleted: { [Op.eq]: 0 },
-                status: { [Op.eq]: 1 },
-                username: { [Op.eq]: req.body.username }
-            },
-            attributes: { exclude: ['deleted', 'password'] },
-        })
+        let result2 = null
+        if(role == "admin"){
+            result2 = await admins.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+                attributes: { exclude: ['deleted', 'password'] },
+            })
+        } else if (role == "tutor"){
+            result2 = await tutors.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+                attributes: { exclude: ['deleted', 'password'] },
+            })
+        } else {
+            result2 = await talents.findOne({
+                where: {
+                    deleted: { [Op.eq]: 0 },
+                    status: { [Op.eq]: 1 },
+                    username: { [Op.eq]: req.body.username }
+                },
+                attributes: { exclude: ['deleted', 'password'] },
+            })
+        }
+        
         return res.status(200).send({ message: "Berhasil Login", user: result2 })
     } catch (error) {
         console.log(error);
         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
     }
 }
-
-// exports.verificationResetPassword = async (req, res) => {
-//     try {
-//         const result = await admins.findOne({
-//             where: {
-//                 deleted: { [Op.eq]: 0 },
-//                 id: { [Op.eq]: req.body.id },
-//                 email: { [Op.eq]: req.body.email },
-//                 reset_otp: { [Op.eq]: req.body.otp },
-//             }
-//         })
-//         if (!result) {
-//             return res.status(400).send({ message: "Kode OTP Salah!" })
-//         }
-//         const onUpdate = await admins.update({
-//             reset_otp: null
-//         }, {
-//             where: {
-//                 deleted: { [Op.eq]: 0 },
-//                 id: { [Op.eq]: req.body.id }
-//             }
-//         })
-//         res.status(200).send({ message: "Verifikasi Berhasil", update: onUpdate })
-//         return
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).send({ message: "Gagal mendapatkan data admin", error: error })
-//     }
-// }

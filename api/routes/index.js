@@ -9,17 +9,18 @@ module.exports = (app) => {
     app.post('/admin', middlewareHere, cAdmin.create);
     app.patch('/admin', middlewareHere, cAdmin.update);
     app.delete('/admin', middlewareHere, cAdmin.delete);
-    app.post('/admin/auth', middlewareHere, cAdmin.login);
+    
+    app.post('/user/auth', middlewareHere, cAdmin.login);
 
     app.get('/talents', middlewareHere, cTalent.list);
     app.post('/talent', middlewareHere, cTalent.create);
     app.patch('/talent', middlewareHere, cTalent.update);
     app.delete('/talent', middlewareHere, cTalent.delete);
-    app.post('/talent/auth', middlewareHere, cTalent.login);
+    app.post('/talent/verification', middlewareHere, cTalent.verificationTalent);
 
     app.get('/tutors', middlewareHere, cTutor.list);
     app.post('/tutor', middlewareHere, cTutor.create);
     app.patch('/tutor', middlewareHere, cTutor.update);
     app.delete('/tutor', middlewareHere, cTutor.delete);
-    app.post('/tutor/auth', middlewareHere, cTutor.login);
+    app.post('/tutor/verification', middlewareHere, cTutor.verificationTutor);
 }
