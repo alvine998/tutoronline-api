@@ -5,6 +5,7 @@ module.exports = (app) => {
     const cTalent = require('../controllers/talent.js');
     const cTutor = require('../controllers/tutor.js');
     const cModule = require('../controllers/module.js');
+    const cTutorModule = require('../controllers/tutor_modules.js');
 
     app.get('/admins', middlewareHere, cAdmin.list);
     app.post('/admin', middlewareHere, cAdmin.create);
@@ -29,4 +30,9 @@ module.exports = (app) => {
     app.post('/module', middlewareHere, cModule.create);
     app.patch('/module', middlewareHere, cModule.update);
     app.delete('/module', middlewareHere, cModule.delete);
+
+    app.get('/tutor_modules', middlewareHere, cTutorModule.list);
+    app.post('/tutor_module', middlewareHere, cTutorModule.create);
+    app.patch('/tutor_module', middlewareHere, cTutorModule.update);
+    app.delete('/tutor_module', middlewareHere, cTutorModule.delete);
 }

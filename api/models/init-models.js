@@ -3,6 +3,7 @@ var _admins = require("./admins");
 var _modules = require("./modules");
 var _talent_modules = require("./talent_modules");
 var _talents = require("./talents");
+var _tutor_modules = require("./tutor_modules");
 var _tutors = require("./tutors");
 
 function initModels(sequelize) {
@@ -10,6 +11,7 @@ function initModels(sequelize) {
   var modules = _modules(sequelize, DataTypes);
   var talent_modules = _talent_modules(sequelize, DataTypes);
   var talents = _talents(sequelize, DataTypes);
+  var tutor_modules = _tutor_modules(sequelize, DataTypes);
   var tutors = _tutors(sequelize, DataTypes);
 
   talent_modules.belongsTo(modules, { as: "module", foreignKey: "module_id"});
@@ -24,6 +26,7 @@ function initModels(sequelize) {
     modules,
     talent_modules,
     talents,
+    tutor_modules,
     tutors,
   };
 }
